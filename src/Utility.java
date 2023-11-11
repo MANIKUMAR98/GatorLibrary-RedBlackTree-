@@ -2,6 +2,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Utility {
 	
@@ -12,24 +13,9 @@ public class Utility {
 		access.writeUTF(System.lineSeparator());
 	}
 	
-	public synchronized void writeTheBookData(Book book, DataOutputStream access) throws IOException {
-		String bookId = "BookID = " + book.getBookId();
-		access.write(bookId.getBytes());
-		access.writeUTF(System.lineSeparator());
-		String title = "Title = " + book.getBookName();
-		access.write(title.getBytes());
-		access.writeUTF(System.lineSeparator());
-		String author = "Author = " + book.getAuthorName();
-		access.write(author.getBytes());
-		access.writeUTF(System.lineSeparator());
-		String availability = "Availability = " + book.getAvailabilityStatus();
-		access.write(availability.getBytes());
-		access.writeUTF(System.lineSeparator());
-		String bowrrowedBy = "BorrowedBy = " + this.getDataBasedOnAvailability(book);
-		access.write(bowrrowedBy.getBytes());
-		access.writeUTF(System.lineSeparator());
-		String reservations = "Reservations = " + this.getReservations(book.getReservationHeap()).toString();
-		access.write(reservations.getBytes());
+	public void writeTheBookData(Book book, DataOutputStream access) throws IOException {
+		String bookString = book.toString();
+		access.write(bookString.getBytes());
 		access.writeUTF(System.lineSeparator());
 	}
 	
@@ -38,12 +24,18 @@ public class Utility {
 	}
 	
 	public List<Integer> getReservations(List<Reservation> reservationList) {
-		List<Integer> reservations = new ArrayList<>();
 		if(reservationList != null && !reservationList.isEmpty()) {
-			for(Reservation res : reservationList) {
-				 reservations.add(res.getPatronId());
-			}	
+			return reservationList.stream().map(Reservation::getPatronId).collect(Collectors.toList());
 		}
-		return reservations;
+		return new ArrayList<>();
+	}
+	
+	public String reservationString(List<Reservation> reservationList) {
+		String str = "";
+		for(Reservation reservation: reservationList) {
+			int patronId = reservation.getPatronId();
+			str = str + String.valueOf(patronId) +", ";
+		}
+		return str.length() > 0 ? str.substring(0, str.length()-2) : str;
 	}
 }

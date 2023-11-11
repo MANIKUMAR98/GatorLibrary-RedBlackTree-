@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Book {
 
@@ -22,6 +23,13 @@ public class Book {
 	
 	public int getBookId() {
 		return this.bookId;
+	}
+
+	@Override
+	public String toString() {
+	    String borrowedByString = borrowedBy == 0 ? "None" : String.valueOf(borrowedBy);
+	    return String.format("BookID = %d\nTitle = \"%s\"\nAuthor = \"%s\"\nAvailability = \"%s\"\nBorrowedBy = %s\nReservations = %s",
+	            bookId, bookName, authorName, availabilityStatus, borrowedByString, reservationHeap.stream().map(Reservation::getPatronId).collect(Collectors.toList()).toString());
 	}
 
 	public String getBookName() {

@@ -10,11 +10,11 @@ import java.util.regex.Pattern;
 public class GatorLibrary {
 	
 	//regular expression pattern to match the input values
-	public static String insertBlockPattern = "InsertBook\\((\\d+), \"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"\\)";
+	public static String insertBlockPattern = "InsertBook\\((\\d+),\\s*\"([^\"]+)\",\\s*\"([^\"]+)\",\\s*\"([^\"]+)\"\\)";
 	public static String printBookPattern = "PrintBook\\((\\d+)\\)";
-	public static String printBooksPattern = "PrintBooks\\((\\d+), (\\d+)\\)";
-	public static String borrowBookPattern = "BorrowBook\\((\\d+), (\\d+), (\\d+)\\)";
-	public static String returnBookPattern = "ReturnBook\\((\\d+), (\\d+)\\)";
+	public static String printBooksPattern = "PrintBooks\\((\\d+),\\s*(\\d+)\\)"; 
+	public static String borrowBookPattern = "BorrowBook\\((\\d+),\\s*(\\d+), (\\d+)\\)";
+	public static String returnBookPattern = "ReturnBook\\((\\d+),\\s*(\\d+)\\)";
 	public static String deleteBookPattern = "DeleteBook\\((\\d+)\\)";
 	public static String findClosestBookPattern = "FindClosestBook\\((\\d+)\\)";
 	
@@ -52,7 +52,6 @@ public class GatorLibrary {
 	        		   int start = Integer.parseInt(matcher.group(1));
 	        		   int end = Integer.parseInt(matcher.group(2));
 	        		   library.printBooks(start, end, utility, access);
-	        		   access.write("---------------------------------------".getBytes());
 	        		   access.writeUTF(System.lineSeparator());
 	        	   }
 	           } else if(input.startsWith("PrintBook")) {
@@ -61,12 +60,11 @@ public class GatorLibrary {
 	        	   if (matcher.find()) {
 	        		   int bookId = Integer.parseInt(matcher.group(1));
 	        		   Book book = library.getBookFromLibrary(bookId);
-	        		   if(book.getAuthorName() == null) {
-	        			   utility.write("No book exists.", access);
+	        		   if(book == library.externalNode) {
+	        			   utility.write("Book " +bookId+" not found in the library", access);
 	        		   } else {
 	        			   utility.writeTheBookData(book, access);
 	        		   }
-	        		   access.write("---------------------------------------".getBytes());
 	        		   access.writeUTF(System.lineSeparator());
 	        	   }
 	           } else if(input.startsWith("BorrowBook")) {
@@ -77,7 +75,6 @@ public class GatorLibrary {
 	        		   int bookId = Integer.parseInt(matcher.group(2));
 	        		   int patronPriority = Integer.parseInt(matcher.group(3));
 	        		   library.borrowBook(patronId, bookId, patronPriority, access, utility);
-	        		   access.write("---------------------------------------".getBytes());
 		       		   access.writeUTF(System.lineSeparator());
 	        	   }
 	           } else if(input.startsWith("ReturnBook")) {
@@ -87,7 +84,6 @@ public class GatorLibrary {
 	        		   int patronId = Integer.parseInt(matcher.group(1));
 	        		   int bookId = Integer.parseInt(matcher.group(2));
 	        		   library.returnBook(patronId, bookId, access, utility);
-		        	   access.write("---------------------------------------".getBytes());
 		       		   access.writeUTF(System.lineSeparator());
 	        	   }
 	           } else if(input.startsWith("DeleteBook")) {
@@ -96,7 +92,6 @@ public class GatorLibrary {
 	        	   if(matcher.find()) {
 	        		   int bookId = Integer.parseInt(matcher.group(1));
 	        		   library.deleteBook(bookId, access, utility);
-	        		   access.write("---------------------------------------".getBytes());
 		       		   access.writeUTF(System.lineSeparator());
 	        	   }
 	        	   
@@ -107,19 +102,15 @@ public class GatorLibrary {
 	        	   if(matcher.find()) {
 	        		   int bookId = Integer.parseInt(matcher.group(1));
 		        	   library.findClosestBooks(bookId, utility, access);
-		        	   access.write("---------------------------------------".getBytes());
 	        		   access.writeUTF(System.lineSeparator());
 	        	   }
 	           } else if(input.equals("ColorFlipCount()")) {
 	        	   String res = "Color Flip Count: " + library.colorFlipCount;
 	        	   access.write(res.getBytes());
 	        	   access.writeUTF(System.lineSeparator());
-	        	   access.write("---------------------------------------".getBytes());
 	        	   access.writeUTF(System.lineSeparator());
 	           } else if(input.equals("Quit()")) {
 	        	   access.write("Program Terminated!!".getBytes());
-	        	   access.writeUTF(System.lineSeparator());
-	        	   access.write("---------------------------------------".getBytes());
 	        	   System.exit(0);
 	           }
 	        }

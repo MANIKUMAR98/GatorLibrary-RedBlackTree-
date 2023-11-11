@@ -9,7 +9,7 @@ import java.util.TreeMap;
 public class RedBlackTree {
 	
 	private Book root;
-	private Book TNULL;
+	public Book externalNode;
 	int colorFlipCount = 0;
 	
 	Map<Integer, Book> treeMap = new TreeMap<>();
@@ -17,7 +17,7 @@ public class RedBlackTree {
 	
 	// Preorder
 	private void preOrderHelper(Book node) {
-		if (node != TNULL) {
+		if (node != externalNode) {
 			System.out.print(node.getBookId() + " ");
 			preOrderHelper(node.left);
 			preOrderHelper(node.right);
@@ -26,7 +26,7 @@ public class RedBlackTree {
 
 	// Inorder
 	private void inOrderHelper(Book node) {
-		if (node != TNULL) {
+		if (node != externalNode) {
 			inOrderHelper(node.left);
 			System.out.print(node.getBookId() + " ");
 			inOrderHelper(node.right);
@@ -35,7 +35,7 @@ public class RedBlackTree {
 
 	// Post order
 	private void postOrderHelper(Book node) {
-		if (node != TNULL) {
+		if (node != externalNode) {
 			postOrderHelper(node.left);
 			postOrderHelper(node.right);
 			System.out.print(node.getBookId() + " ");
@@ -44,7 +44,7 @@ public class RedBlackTree {
 
 	// Search the tree
 	private Book getBook(Book node, int value) {
-		if (node == TNULL || value == node.getBookId()) {
+		if (node == externalNode || value == node.getBookId()) {
 			return node;
 		}
 
@@ -152,8 +152,7 @@ public class RedBlackTree {
 				}
 			}
 		}
-		if
-		(x.color == 1) {
+		if(x.color == 1) {
 			colorFlipCount++;
 		}
 		x.color = 0;
@@ -172,9 +171,9 @@ public class RedBlackTree {
 
 	public void deleteBook(int bookId, DataOutputStream access, Utility utility) throws IOException {
 		Book books = this.root;
-		Book z = TNULL;
+		Book z = externalNode;
 		Book x, y;
-		while (books != TNULL) {
+		while (books != externalNode) {
 			if (books.getBookId() == bookId) {
 				z = books;
 			}
@@ -186,20 +185,20 @@ public class RedBlackTree {
 			}
 		}
 
-		if (z == TNULL) {
+		if (z == externalNode) {
 			System.out.println("Couldn't find book in the library");
 			return;
 		}
 		
 		utility.write("Book " + bookId + " is no longer available"
-				+ (z.getReservationHeap().size() == 0 ? "" : ". Reservations made by Patrons " + utility.getReservations(z.getReservationHeap()) + " have been cancelled!"), access);
+				+ (z.getReservationHeap().size() == 0 ? "" : ". Reservations made by Patrons " + utility.reservationString(z.getReservationHeap()) + " have been cancelled!"), access);
 
 		y = z;
 		int yOriginalColor = y.color;
-		if (z.left == TNULL) {
+		if (z.left == externalNode) {
 			x = z.right;
 			rbTransplant(z, z.right);
-		} else if (z.right == TNULL) {
+		} else if (z.right == externalNode) {
 			x = z.left;
 			rbTransplant(z, z.left);
 		} else {
@@ -301,7 +300,7 @@ public class RedBlackTree {
 	}
 
 	private void printHelper(Book root, String indent, boolean last) {
-		if (root != TNULL) {
+		if (root != externalNode) {
 			System.out.print(indent);
 			if (last) {
 				System.out.print("R----");
@@ -319,11 +318,11 @@ public class RedBlackTree {
 	}
 
 	public RedBlackTree() {
-		TNULL = new Book();
-		TNULL.color = 0;
-		TNULL.left = null;
-		TNULL.right = null;
-		root = TNULL;
+		externalNode = new Book();
+		externalNode.color = 0;
+		externalNode.left = null;
+		externalNode.right = null;
+		root = externalNode;
 	}
 
 	public void preorder() {
@@ -343,26 +342,26 @@ public class RedBlackTree {
 	}
 
 	public Book minimum(Book node) {
-		while (node.left != TNULL) {
+		while (node.left != externalNode) {
 			node = node.left;
 		}
 		return node;
 	}
 
 	public Book maximum(Book node) {
-		while (node.right != TNULL) {
+		while (node.right != externalNode) {
 			node = node.right;
 		}
 		return node;
 	}
 
 	public Book successor(Book x) {
-		if (x.right != TNULL) {
+		if (x.right != externalNode) {
 			return minimum(x.right);
 		}
 
 		Book y = x.parent;
-		while (y != TNULL && x == y.right) {
+		while (y != externalNode && x == y.right) {
 			x = y;
 			y = y.parent;
 		}
@@ -370,12 +369,12 @@ public class RedBlackTree {
 	}
 
 	public Book predecessor(Book x) {
-		if (x.left != TNULL) {
+		if (x.left != externalNode) {
 			return maximum(x.left);
 		}
 
 		Book y = x.parent;
-		while (y != TNULL && x == y.left) {
+		while (y != externalNode && x == y.left) {
 			x = y;
 			y = y.parent;
 		}
@@ -386,7 +385,7 @@ public class RedBlackTree {
 	public void leftRotate(Book x) {
 		Book y = x.right;
 		x.right = y.left;
-		if (y.left != TNULL) {
+		if (y.left != externalNode) {
 			y.left.parent = x;
 		}
 		y.parent = x.parent;
@@ -404,7 +403,7 @@ public class RedBlackTree {
 	public void rightRotate(Book x) {
 		Book y = x.left;
 		x.left = y.right;
-		if (y.right != TNULL) {
+		if (y.right != externalNode) {
 			y.right.parent = x;
 		}
 		y.parent = x.parent;
@@ -429,8 +428,8 @@ public class RedBlackTree {
 		book.setBorrowedBy(0);
 		book.setReservationHeap(new ArrayList<>());
 		book.parent = null;
-		book.left = TNULL;
-		book.right = TNULL;
+		book.left = externalNode;
+		book.right = externalNode;
 		book.color = 1;
 		return book;
 	}
@@ -441,7 +440,7 @@ public class RedBlackTree {
 		Book y = null;
 		Book x = this.root;
 
-		while (x != TNULL) {
+		while (x != externalNode) {
 			y = x;
 			if (node.getBookId() < x.getBookId()) {
 				x = x.left;
@@ -481,8 +480,8 @@ public class RedBlackTree {
 	
 	public void returnBook(int patronId, int bookId, DataOutputStream access, Utility utility) throws IOException {
 		Book book = this.getBookFromLibrary(bookId);
-		if(book != TNULL) {
-			utility.write("Book " + bookId + " Returned by Patron "+ patronId, access);
+		if(book != externalNode) {
+			utility.write("Book " + bookId + " returned by Patron "+ patronId, access);
 			List<Reservation> reservationHeap = book.getReservationHeap();
 			if(reservationHeap != null && !reservationHeap.isEmpty()) {
 				int newBorrower = reservationHeap.get(0).getPatronId();
@@ -490,7 +489,8 @@ public class RedBlackTree {
 				reservationHeap.set(0, reservationHeap.get(reservationHeap.size()-1));
 				reservationHeap.remove(reservationHeap.size()-1);
 				heapfy(reservationHeap, reservationHeap.size(), 0);
-				utility.write("Book " + bookId + " Allotted to Patron "+ newBorrower, access);
+				access.writeUTF(System.lineSeparator());
+				utility.write("Book " + bookId + " allotted to Patron "+ newBorrower, access);
 			} else {
 				book.setAvailabilityStatus("Yes");
 			}
@@ -499,35 +499,39 @@ public class RedBlackTree {
 	
 	//code for heapify
 	public void borrowBook(int patronId, int bookId, int patronPriority, DataOutputStream access, Utility utility) throws IOException {
-		Long reservationTime = System.currentTimeMillis();
 		Book book = this.getBookFromLibrary(bookId);
-		if(book == TNULL) {
-			utility.write("Book Not Found to add reservation", access);
+		if(book == externalNode) {
+			utility.write("Book not found to add reservation", access);
 			return;
 		}
 		
 		if(book.getAvailabilityStatus().toLowerCase().equals("yes")) {
 			book.setBorrowedBy(patronId);
 			book.setAvailabilityStatus("No");
-			utility.write("Book " + bookId + " Borrowed by Patron " + patronId, access);
+			utility.write("Book " + bookId + " borrowed by Patron " + patronId, access);
 			return;
 		}
 		
 		if(book.getBorrowedBy() == patronId) {
-			utility.write("Book " + bookId + " Already Borrowed by Patron " + patronId, access);
+			utility.write("Book " + bookId + " already borrowed by Patron " + patronId, access);
 			return;	
 		}
 		
 		List<Reservation> reservationHeap = book.getReservationHeap();
 		if(utility.getReservations(reservationHeap).contains(patronId)) {
-			utility.write("Book " + bookId + " Already Reserved by Patron " + patronId, access);
+			utility.write("Book " + bookId + " already reserved by Patron " + patronId, access);
 			return;
 		}
 		
+		if(reservationHeap.size() >= 20) {
+			utility.write("Reservations for book " + bookId + " is full", access);
+			return;
+		}
+		Long reservationTime = System.currentTimeMillis();
 		Reservation reservation = new Reservation(patronId, patronPriority, reservationTime);
 		List<Reservation> reverations = this.insertIntoReservationHeap(reservation, reservationHeap);
 		book.setReservationHeap(reverations);
-		utility.write("Book " + bookId + " Reserved by Patron " + patronId, access);
+		utility.write("Book " + bookId + " reserved by Patron " + patronId, access);
 	} 
 	
     public List<Reservation> insertIntoReservationHeap(Reservation reservation, List<Reservation> reservationHeap) {
@@ -591,8 +595,9 @@ public class RedBlackTree {
         Book currentNode = root;
         int closest = root.getBookId();
 
-        while (currentNode != TNULL) {
+        while (currentNode != externalNode) {
             if (bookId == currentNode.getBookId()) {
+            	this.treeMap.clear();
                 this.treeMap.put(currentNode.getBookId() ,currentNode);
                 break;
             }
@@ -615,9 +620,13 @@ public class RedBlackTree {
 	
 	public void printTheBooksInOrder(Utility utility, DataOutputStream access) throws IOException {
 		if(this.treeMap != null && !this.treeMap.isEmpty()) {
+			int count = 0;
 			for(Map.Entry<Integer, Book> entry : this.treeMap.entrySet()) {
+				count++;
 				utility.writeTheBookData(entry.getValue(), access);
-				access.writeUTF(System.lineSeparator());
+				if(treeMap.size() != count) {
+					access.writeUTF(System.lineSeparator());
+				}
 			}
 		}
 		this.treeMap.clear();
@@ -630,7 +639,7 @@ public class RedBlackTree {
 	
 	//get the books in range
 	public void getBooksInRange(Book book, int start, int end) {
-		if(book == TNULL) {
+		if(book == externalNode) {
 			return;
 		}
 		if(book.getBookId() >= start && book.getBookId() <= end) {
