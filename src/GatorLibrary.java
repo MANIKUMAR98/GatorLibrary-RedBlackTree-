@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
@@ -13,7 +14,7 @@ public class GatorLibrary {
 	public static String insertBlockPattern = "InsertBook\\((\\d+),\\s*\"([^\"]+)\",\\s*\"([^\"]+)\",\\s*\"([^\"]+)\"\\)";
 	public static String printBookPattern = "PrintBook\\((\\d+)\\)";
 	public static String printBooksPattern = "PrintBooks\\((\\d+),\\s*(\\d+)\\)"; 
-	public static String borrowBookPattern = "BorrowBook\\((\\d+),\\s*(\\d+), (\\d+)\\)";
+	public static String borrowBookPattern = "BorrowBook\\((\\d+),\\s*(\\d+),\\s*(\\d+)\\)";
 	public static String returnBookPattern = "ReturnBook\\((\\d+),\\s*(\\d+)\\)";
 	public static String deleteBookPattern = "DeleteBook\\((\\d+)\\)";
 	public static String findClosestBookPattern = "FindClosestBook\\((\\d+)\\)";
@@ -28,8 +29,11 @@ public class GatorLibrary {
 		
 		Utility utility = new Utility();
 		try {
+			String filePath = new File(".").getAbsolutePath();
+			filePath = filePath.substring(0, filePath.length()-1);
+			System.out.println("Current working directory: " +filePath);
 			DataOutputStream access = new DataOutputStream(new FileOutputStream(inputFileName[0] + "_output_file.txt"));
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(input_file_name), StandardCharsets.UTF_8));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath + input_file_name), StandardCharsets.UTF_8));
 	        String input;
 	        RedBlackTree library = new RedBlackTree();
 	        while ((input = reader.readLine()) != null) {
@@ -96,7 +100,6 @@ public class GatorLibrary {
 	        	   }
 	        	   
 	           } else if(input.startsWith("FindClosestBook")) {
-	        	   library.printTree();
 	        	   pattern = Pattern.compile(findClosestBookPattern);
 	        	   matcher = pattern.matcher(input);
 	        	   if(matcher.find()) {
@@ -116,9 +119,8 @@ public class GatorLibrary {
 	        }
 	        reader.close();
 	        access.close();
-	        library.printTree();
 		} catch (Exception e) {
-			System.err.println("Expection occurred while reading the file "+ e.getMessage());
+			System.err.println("Expection occurred while reading the file "+ e);
 		} 
 		
 		

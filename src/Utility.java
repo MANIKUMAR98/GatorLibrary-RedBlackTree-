@@ -6,9 +6,11 @@ import java.util.stream.Collectors;
 
 public class Utility {
 	
+	Long versionNumber = 0L;
+	
 	public RedBlackTree library = new RedBlackTree();
 	
-	public synchronized void write(String data, DataOutputStream access) throws IOException {
+	public void write(String data, DataOutputStream access) throws IOException {
 		access.write(data.getBytes());
 		access.writeUTF(System.lineSeparator());
 	}
@@ -37,5 +39,9 @@ public class Utility {
 			str = str + String.valueOf(patronId) +", ";
 		}
 		return str.length() > 0 ? str.substring(0, str.length()-2) : str;
+	}
+	
+	public Long getTimestampForReservation() {
+		return ++versionNumber;
 	}
 }

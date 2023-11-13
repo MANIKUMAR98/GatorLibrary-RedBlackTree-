@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 public class RedBlackTree {
@@ -14,33 +15,32 @@ public class RedBlackTree {
 	
 	Map<Integer, Book> treeMap = new TreeMap<>();
 	
-	
 	// Preorder
-	private void preOrderHelper(Book node) {
-		if (node != externalNode) {
-			System.out.print(node.getBookId() + " ");
-			preOrderHelper(node.left);
-			preOrderHelper(node.right);
-		}
-	}
+//	private void preOrderHelper(Book node) {
+//		if (node != externalNode) {
+//			System.out.print(node.getBookId() + " ");
+//			preOrderHelper(node.left);
+//			preOrderHelper(node.right);
+//		}
+//	}
 
 	// Inorder
-	private void inOrderHelper(Book node) {
-		if (node != externalNode) {
-			inOrderHelper(node.left);
-			System.out.print(node.getBookId() + " ");
-			inOrderHelper(node.right);
-		}
-	}
+//	private void inOrderHelper(Book node) {
+//		if (node != externalNode) {
+//			inOrderHelper(node.left);
+//			System.out.print(node.getBookId() + " ");
+//			inOrderHelper(node.right);
+//		}
+//	}
 
-	// Post order
-	private void postOrderHelper(Book node) {
-		if (node != externalNode) {
-			postOrderHelper(node.left);
-			postOrderHelper(node.right);
-			System.out.print(node.getBookId() + " ");
-		}
-	}
+//	// Post order
+//	private void postOrderHelper(Book node) {
+//		if (node != externalNode) {
+//			postOrderHelper(node.left);
+//			postOrderHelper(node.right);
+//			System.out.print(node.getBookId() + " ");
+//		}
+//	}
 
 	// Search the tree
 	private Book getBook(Book node, int value) {
@@ -152,9 +152,9 @@ public class RedBlackTree {
 				}
 			}
 		}
-		if(x.color == 1) {
-			colorFlipCount++;
-		}
+//		if(x.color == 1) {
+//			colorFlipCount++;
+//		}
 		x.color = 0;
 	}
 
@@ -216,9 +216,9 @@ public class RedBlackTree {
 			rbTransplant(z, y);
 			y.left = z.left;
 			y.left.parent = y;
-			if(y.color != z.color) {
-				colorFlipCount++;
-			}
+//			if(y.color != z.color) {
+//				colorFlipCount++;
+//			}
 			y.color = z.color;
 		}
 		if (yOriginalColor == 0) {
@@ -239,10 +239,16 @@ public class RedBlackTree {
 						colorFlipCount++;
 					}
 					child.parent.color = 0;
-					if(child.parent.parent.color == 0) {
-						colorFlipCount++;
+//					if(child.parent.parent.color == 0) {
+//						colorFlipCount++;
+//					}
+//					child.parent.parent.color = 1;
+					if(child.parent.parent != root) {
+						if(child.parent.parent.color == 0) {
+							colorFlipCount++;
+						}
+						child.parent.parent.color = 1;
 					}
-					child.parent.parent.color = 1;
 					child = child.parent.parent;
 				} else {
 					if (child == child.parent.left) {
@@ -253,10 +259,14 @@ public class RedBlackTree {
 						colorFlipCount++;
 					}
 					child.parent.color = 0;
+//					if(child.parent.parent.color == 0) {
+//						colorFlipCount++;
+//					}
 					if(child.parent.parent.color == 0) {
 						colorFlipCount++;
 					}
 					child.parent.parent.color = 1;
+//					child.parent.parent.color = 1;
 					leftRotate(child.parent.parent);
 				}
 			} else {
@@ -268,10 +278,15 @@ public class RedBlackTree {
 						colorFlipCount++;
 					}
 					child.parent.color = 0;
-					if(child.parent.parent.color == 0) {
-						colorFlipCount++;
+//					if(child.parent.parent.color == 0) {
+//						colorFlipCount++;
+//					}
+					if(child.parent.parent != root) {
+						if(child.parent.parent.color == 0) {
+							colorFlipCount++;
+						}
+						child.parent.parent.color = 1;
 					}
-					child.parent.parent.color = 1;
 					child = child.parent.parent;
 				} else {
 					if (child == child.parent.right) {
@@ -282,6 +297,9 @@ public class RedBlackTree {
 						colorFlipCount++;
 					}
 					child.parent.color = 0;
+//					if(child.parent.parent.color == 0) {
+//						colorFlipCount++;
+//					}
 					if(child.parent.parent.color == 0) {
 						colorFlipCount++;
 					}
@@ -299,23 +317,23 @@ public class RedBlackTree {
 		root.color = 0;
 	}
 
-	private void printHelper(Book root, String indent, boolean last) {
-		if (root != externalNode) {
-			System.out.print(indent);
-			if (last) {
-				System.out.print("R----");
-				indent += "   ";
-			} else {
-				System.out.print("L----");
-				indent += "|  ";
-			}
-
-			String sColor = root.color == 1 ? "RED" : "BLACK";
-			System.out.println(root.getBookId() + "(" + sColor + ")");
-			printHelper(root.left, indent, false);
-			printHelper(root.right, indent, true);
-		}
-	}
+//	private void printHelper(Book root, String indent, boolean last) {
+//		if (root != externalNode) {
+//			System.out.print(indent);
+//			if (last) {
+//				System.out.print("R----");
+//				indent += "   ";
+//			} else {
+//				System.out.print("L----");
+//				indent += "|  ";
+//			}
+//
+//			String sColor = root.color == 1 ? "RED" : "BLACK";
+//			System.out.println(root.getBookId() + "(" + sColor + ")");
+//			printHelper(root.left, indent, false);
+//			printHelper(root.right, indent, true);
+//		}
+//	}
 
 	public RedBlackTree() {
 		externalNode = new Book();
@@ -325,17 +343,17 @@ public class RedBlackTree {
 		root = externalNode;
 	}
 
-	public void preorder() {
-		preOrderHelper(this.root);
-	}
-
-	public void inorder() {
-		inOrderHelper(this.root);
-	}
-
-	public void postorder() {
-		postOrderHelper(this.root);
-	}
+//	public void preorder() {
+//		preOrderHelper(this.root);
+//	}
+//
+//	public void inorder() {
+//		inOrderHelper(this.root);
+//	}
+//
+//	public void postorder() {
+//		postOrderHelper(this.root);
+//	}
 
 	public Book getBookFromLibrary(int bookId) {
 		return getBook(this.root, bookId);
@@ -460,6 +478,7 @@ public class RedBlackTree {
 
 		if (node.parent == null) {
 			node.color = 0;
+			this.colorFlipCount++;
 			return;
 		}
 
@@ -474,12 +493,17 @@ public class RedBlackTree {
 		return this.root;
 	}
 
-	public void printTree() {
-		printHelper(this.root, "", true);
-	}
+//	public void printTree() {
+//		printHelper(this.root, "", true);
+//	}
 	
 	public void returnBook(int patronId, int bookId, DataOutputStream access, Utility utility) throws IOException {
 		Book book = this.getBookFromLibrary(bookId);
+		if(book.getBorrowedBy() != patronId) {
+			utility.write("Patron " + patronId +" never borrowed book "+ bookId, access);
+			System.out.println("Patron " + patronId +" never borrowed book "+ bookId);
+			return;
+		}
 		if(book != externalNode) {
 			utility.write("Book " + bookId + " returned by Patron "+ patronId, access);
 			List<Reservation> reservationHeap = book.getReservationHeap();
@@ -527,8 +551,7 @@ public class RedBlackTree {
 			utility.write("Reservations for book " + bookId + " is full", access);
 			return;
 		}
-		Long reservationTime = System.currentTimeMillis();
-		Reservation reservation = new Reservation(patronId, patronPriority, reservationTime);
+		Reservation reservation = new Reservation(patronId, patronPriority, utility.getTimestampForReservation());
 		List<Reservation> reverations = this.insertIntoReservationHeap(reservation, reservationHeap);
 		book.setReservationHeap(reverations);
 		utility.write("Book " + bookId + " reserved by Patron " + patronId, access);
@@ -566,21 +589,19 @@ public class RedBlackTree {
 		int left = (2*i)+1;
 		int right = (2*i)+2;
 		if(left < length) {
-			if(reservationHeap.get(left).getPriorityNumber() == reservationHeap.get(smallest).getPriorityNumber()
-					&& reservationHeap.get(left).getTimeOfReservation() < reservationHeap.get(smallest).getTimeOfReservation()) {
-				smallest = left;
-			} else if(reservationHeap.get(left).getPriorityNumber() < reservationHeap.get(smallest).getPriorityNumber()) {
+			if((reservationHeap.get(left).getPriorityNumber() == reservationHeap.get(smallest).getPriorityNumber()
+					&& reservationHeap.get(left).getTimeOfReservation() < reservationHeap.get(smallest).getTimeOfReservation())
+					|| reservationHeap.get(left).getPriorityNumber() < reservationHeap.get(smallest).getPriorityNumber()) {
 				smallest = left;
 			}
 		}
 		
 		if(right < length) {
-			if(reservationHeap.get(right).getPriorityNumber() == reservationHeap.get(smallest).getPriorityNumber()
-					&& reservationHeap.get(right).getTimeOfReservation() < reservationHeap.get(smallest).getTimeOfReservation()) {
+			if((reservationHeap.get(right).getPriorityNumber() == reservationHeap.get(smallest).getPriorityNumber()
+					&& reservationHeap.get(right).getTimeOfReservation() < reservationHeap.get(smallest).getTimeOfReservation()) 
+					|| reservationHeap.get(right).getPriorityNumber() < reservationHeap.get(smallest).getPriorityNumber()) {
 				smallest = right;
-			} else if(reservationHeap.get(right).getPriorityNumber() < reservationHeap.get(smallest).getPriorityNumber()) {
-				smallest = right;
-			}
+			} 
 		}
 		if(smallest != i) {
 			Reservation temp = reservationHeap.get(smallest);
@@ -621,7 +642,7 @@ public class RedBlackTree {
 	public void printTheBooksInOrder(Utility utility, DataOutputStream access) throws IOException {
 		if(this.treeMap != null && !this.treeMap.isEmpty()) {
 			int count = 0;
-			for(Map.Entry<Integer, Book> entry : this.treeMap.entrySet()) {
+			for(Entry<Integer, Book> entry : this.treeMap.entrySet()) {
 				count++;
 				utility.writeTheBookData(entry.getValue(), access);
 				if(treeMap.size() != count) {
@@ -634,6 +655,10 @@ public class RedBlackTree {
 	
 	public void printBooks(int start, int end, Utility utility, DataOutputStream access) throws IOException {
 		this.getBooksInRange(this.root, start, end);
+		if(this.treeMap.isEmpty() || this.treeMap == null) {
+			utility.write("No books found in library in the range of " +start +" to " + end, access);
+			return;
+		}
 		this.printTheBooksInOrder(utility, access);
 	}
 	
