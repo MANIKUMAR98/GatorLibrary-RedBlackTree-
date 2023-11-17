@@ -7,7 +7,7 @@ JC = javac
 	$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-		  GatorLibrary.java \
+		  gatorLibrary.java \
 		  Book.java \
 		  RedBlackTree.java \
 		  Reservation.java \
@@ -21,4 +21,4 @@ clean:
 	$(RM) *.class
 	
 run:
-	java -cp . GatorLibrary $(args)
+	java -cp . gatorLibrary $(args)

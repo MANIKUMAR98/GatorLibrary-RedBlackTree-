@@ -25,6 +25,7 @@ public class Book {
 		return this.bookId;
 	}
 
+	//this tostring() method will help us to create the string by the book so we can write it into file
 	@Override
 	public String toString() {
 	    String borrowedByString = borrowedBy == 0 ? "None" : String.valueOf(borrowedBy);
