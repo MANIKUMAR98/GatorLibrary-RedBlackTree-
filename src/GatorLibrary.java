@@ -21,7 +21,7 @@ public class gatorLibrary {
 	
 	public static void main(String[] args) {
 		//if there are no arguments then returns without proceeding further
-		if(args.length < 0) {
+		if(args.length == 0) {
 			System.out.println("Please provide the input file name");
 			return;
 		}
@@ -31,10 +31,12 @@ public class gatorLibrary {
 		String[] inputFileName = input_file_name.split(".txt");
 		Utility utility = new Utility();
 		OutputStream access = null;
+		BufferedReader reader = null;
 		try {
+			//creates the file based on the name of the input file name in the given directory
 			access = new FileOutputStream(new File(inputFileName[0] + "_output_file.txt"));
-			//based on the relative path and the file name Buffered reader will start reading the file
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(input_file_name)));
+			//reads the data from the file 
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(input_file_name)));
 	        String input;
 	        RedBlackTree library = new RedBlackTree();
 	        while ((input = reader.readLine()) != null) {
@@ -150,28 +152,29 @@ public class gatorLibrary {
 	        	   }
 	           } else if(input.equals("ColorFlipCount()")) {
 	        	   //here will keep of track of the color change of books in the library
-	        	   String res = "Color Flip Count: " + library.colorFlipCount;
-	        	   access.write(res.getBytes());
-	        	   utility.addNewLine(access);
-	        	   utility.addNewLine(access);
+	        	   String res = "Color Flip Count: " + library.colorFlipCount + "\n";
+	        	   utility.write(res, access);
 	           } else if(input.equals("Quit()")) {
 	        	   access.write("Program Terminated!!".getBytes());
 	        	   //this line makes sure that program terminates
+	        	   System.out.println(inputFileName[0] + "_output_file.txt" + " file is created successfully!!");
 	        	   System.exit(0);
 	           }
 	        }
-	        reader.close();
-	        access.close();
+	        System.out.println(inputFileName[0] + "_output_file.txt" + " is created successfully!!");
 		} catch (Exception e) {
 			System.err.println("Expection occurred while reading the file "+ e);
 		} finally {
-			if(access != null) {
 				try {
-					access.close();
+					if(access != null) {
+						access.close();
+					}
+					if(reader != null) {
+						reader.close();
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			}
 		}
 	}
 	

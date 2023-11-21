@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 public class Utility {
 	
-	Long versionNumber = 0L;
+	Long timeStamp = 0L;
 	
 	public RedBlackTree library = new RedBlackTree();
 	
@@ -28,7 +28,7 @@ public class Utility {
 	}
 	
 	//this method will give the patron id's in reservation heap
-	public List<Integer> getReservations(List<Reservation> reservationList) {
+	public List<Integer> getPatronIds(List<Reservation> reservationList) {
 		if(reservationList != null && !reservationList.isEmpty()) {
 			return reservationList.stream().map(Reservation::getPatronId).collect(Collectors.toList());
 		}
@@ -50,9 +50,10 @@ public class Utility {
 	
 	//This method helps to maintain the unique reservation time
 	public Long getTimestampForReservation() {
-		return ++versionNumber;
+		return ++timeStamp;
 	}
 	
+	//this method will add the new line to the file
 	public void addNewLine(OutputStream access) throws IOException {
 		access.write("\n".getBytes());
 	}
